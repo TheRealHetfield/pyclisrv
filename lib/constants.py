@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-VERSION = "0.0.102800"
+VERSION = "0.0.102801"
 
 
 # Terminal color defs
