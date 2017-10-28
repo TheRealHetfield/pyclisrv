@@ -21,7 +21,7 @@ def transfer(s,file):
 		f.close()
 
 	else:
-		s.send('File not found')
+		s.send('!FILE_NOT_FOUND')
 
 
 #
