@@ -46,7 +46,7 @@ def transfer(s,file):
 
 		if args.verbose:
 			print_success("Transfer Complete.\n")
-			
+
 	else:
 		s.send('!FILE_NOT_FOUND')
 
@@ -59,7 +59,11 @@ def connect():
 	if args.verbose:
 		print_info("Trying connection to: " + args.ip + ":" + args.port + "\n")
 
-	s.connect((args.ip, int(args.port)))
+	try:
+		s.connect((args.ip, int(args.port)))
+	except Exception,e:
+		print_error("\tException: " + str(e) + "\n")
+		sys.exit()
 
 	if args.verbose:
 		print_success("Connected to: " + args.ip + ":" + args.port + "\n")
