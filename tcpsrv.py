@@ -64,7 +64,12 @@ def transfer(conn, file):
 #
 def connect():
 	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-	s.bind((args.ip, int(args.port)))
+	try:
+		s.bind((args.ip, int(args.port)))
+	except Exception,e:
+		print_error("\tException: " + str(e) + "\n")
+		sys.exit()
+
 	s.listen(1)
 
 	if args.verbose:
