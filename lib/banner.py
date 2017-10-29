@@ -21,6 +21,24 @@ clibanner = """
 """ + TC.END
 
 
+httpsrvbanner = """
+
+""" + TC.END + TC.BOLD + "    HTTP Reverse Shell - Server" + """
+    [Version %s] """ % (VERSION) + """
+    @a7kemc73
+
+""" + TC.END
+
+
+httpclibanner = """
+
+""" + TC.END + TC.BOLD + "    HTTP Reverse Shell - Client" + """
+    [Version %s] """ % (VERSION) + """
+    @a7kemc73
+
+""" + TC.END
+
+
 srvusage = TC.END + """
 
     ./tcpsrv.py [OPTIONS]
