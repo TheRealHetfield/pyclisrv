@@ -23,24 +23,30 @@ def transfer(s,file):
 		f = open(file, 'rb')
 
 		if args.verbose:
-			print_info("Transferring file " + file)
+			print_info("Transferring file " + file + " ")
 
 		packet = f.read(1024)
 		while packet != '':
 			s.send(packet)
 
 			if args.verbose:
-				print_info("!")
+				print_progress("!")
 
-			packet = f.read(1024)
-		
-		s.send('!EXFIL')
+			try:
+				packet = f.read(1024)
+			except:
+				packet = ''
+				pass
 
 		if args.verbose:
-			print_success("Transfer Complete")
+			print_progress("!\n")
 
+		s.send('!EXFIL')
 		f.close()
 
+		if args.verbose:
+			print_success("Transfer Complete.\n")
+			
 	else:
 		s.send('!FILE_NOT_FOUND')
 
