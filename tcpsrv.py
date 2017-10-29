@@ -95,7 +95,12 @@ def connect():
 
 		else:
 			conn.send(cmd)
-			print conn.recv(1024)
+
+			cmdOutput = conn.recv(1024)
+			if '!NULL_OUTPUT' in cmdOutput:
+				print ''
+			else:
+				print cmdOutput
 
 
 #
